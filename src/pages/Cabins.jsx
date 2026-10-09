@@ -2,7 +2,6 @@ import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import CabinTable from "../../src/features/cabins/CabinTable";
 import { useState } from "react";
-// import { set } from "date-fns/fp";
 import Button from "../ui/Button";
 import CreateCabinForm from "../features/cabins/CreateCabinForm";
 

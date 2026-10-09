@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabins } from "../../services/apiCabins";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import CreateCabinForm from "./CreateCabinForm";
+import useDeleteCabin from "./useDeleteCabin";
+import { PiPencilLineThin, PiTrashLight } from "react-icons/pi";
 
 const TableRow = styled.div`
   display: grid;
@@ -43,33 +44,30 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+
 function CabinRow({ cabin }) {
   const { id, image, name, maxCapacity, regularPrice, discount } = cabin;
-
-  const queryClient = useQueryClient()
-
-  const { isPending, mutate } = useMutation({
-    mutationFn: deleteCabins,
-    onSuccess:() => {
-      toast.success("Cabin successfully deleted ! ")
-      queryClient.invalidateQueries({
-        queryKey: ['cabins']
-      });
-    },
-    onError : (err) => toast.error(err.message)
-  });
+  const [showEditForm, setShowEditForm] = useState(false);
+  const {isPending , mutate} = useDeleteCabin();
 
   return (
-    <TableRow role="row">
-      <Img src={image} />
-      <Cabin>{name}</Cabin>
-      <div>fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(id)} disabled={isPending}>
-        Delete
-      </button>
-    </TableRow>
+    <>
+      <TableRow role="row">
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{discount ?formatCurrency(discount) : "\u2014"}</Discount>
+
+        <div>
+          <button onClick={() => setShowEditForm(!showEditForm)}><PiPencilLineThin size={18} /></button>
+          <button onClick={() => mutate(id)} disabled={isPending}>
+            <PiTrashLight size={18} />
+          </button>
+        </div>
+      </TableRow>
+      {showEditForm && <CreateCabinForm editCabin={cabin} />}
+    </>
   );
 }
 
