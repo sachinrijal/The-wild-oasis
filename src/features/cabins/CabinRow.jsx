@@ -1,21 +1,12 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import { useState } from "react";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./useDeleteCabin";
-import { PiPencilLineThin, PiTrashLight } from "react-icons/pi";
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+import Modal from "../../ui/Modal";
+import Table from "../../ui/Table";
+import { SquarePen, Trash } from "lucide-react";
+import Menus from "../../ui/Menus";
 
 const Img = styled.img`
   display: block;
@@ -44,29 +35,48 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-
 function CabinRow({ cabin }) {
   const { id, image, name, maxCapacity, regularPrice, discount } = cabin;
-  const [showEditForm, setShowEditForm] = useState(false);
-  const {isPending , mutate} = useDeleteCabin();
+  const { isPending, mutate } = useDeleteCabin();
 
   return (
     <>
-      <TableRow role="row">
+      <Table.Row role="row">
         <Img src={image} />
         <Cabin>{name}</Cabin>
         <div>fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{discount ?formatCurrency(discount) : "\u2014"}</Discount>
+        <Discount>{discount ? formatCurrency(discount) : "\u2014"}</Discount>
 
         <div>
-          <button onClick={() => setShowEditForm(!showEditForm)}><PiPencilLineThin size={18} /></button>
-          <button onClick={() => mutate(id)} disabled={isPending}>
-            <PiTrashLight size={18} />
-          </button>
+          <Modal>
+            <Menus.Menu>
+              <Menus.Toggle id={id} />
+
+              <Menus.List id={id}>
+                <Modal.Open open="edit-cabin">
+                  <Menus.Button icon={<SquarePen />}>Edit</Menus.Button>
+                </Modal.Open>
+                <Modal.Open open="delete-cabin">
+                  <Menus.Button icon={<Trash />}>Delete</Menus.Button>
+                </Modal.Open>
+              </Menus.List>
+            </Menus.Menu>
+
+            <Modal.Window name="edit-cabin">
+              <CreateCabinForm editCabin={cabin} />
+            </Modal.Window>
+
+            <Modal.Window name="delete-cabin">
+              <ConfirmDelete
+                resource={`${cabin.name} cabin`}
+                onConfirm={() => mutate(id)}
+                disabled={isPending}
+              />
+            </Modal.Window>
+          </Modal>
         </div>
-      </TableRow>
-      {showEditForm && <CreateCabinForm editCabin={cabin} />}
+      </Table.Row>
     </>
   );
 }

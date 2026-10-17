@@ -1,4 +1,8 @@
+import { Cross, X } from "lucide-react";
+import { cloneElement, createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +52,52 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+// create a contextapi
+
+const modelContext = createContext();
+
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = setOpenName;
+
+  return (
+    <modelContext.Provider value={{ openName, close, open }}>
+      {children}
+    </modelContext.Provider>
+  );
+}
+
+function Open({ children, open: openWindowName }) {
+  const { open } = useContext(modelContext);
+
+  return cloneElement(children, { onClick: () => open(openWindowName) });
+}
+
+function Window({ children, name }) {
+  const { openName, close } = useContext(modelContext);
+  
+  const ref = useOutsideClick(close)
+
+  if (name !== openName) return null;
+
+  return createPortal(
+    <Overlay>
+      <StyledModal ref={ref}>
+        <div>
+          <Button onClick={close}>
+            <X />
+          </Button>
+          {cloneElement(children , {onClose : close})}
+        </div>
+      </StyledModal>
+    </Overlay>,
+    document.body,
+  );
+}
+
+Modal.Open = Open;
+Modal.Window = Window;
+
+export default Modal;

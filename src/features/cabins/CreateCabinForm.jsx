@@ -9,9 +9,7 @@ import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 
-
-
-function CreateCabinForm({ editCabin = {} }) {
+function CreateCabinForm({ editCabin = {}, onClose }) {
   const { id: editId, ...editValues } = editCabin;
   const isEditSession = Boolean(editId);
 
@@ -38,6 +36,7 @@ function CreateCabinForm({ editCabin = {} }) {
         {
           onSuccess: () => {
             reset();
+            onClose?.();
           },
         },
       );
@@ -47,6 +46,7 @@ function CreateCabinForm({ editCabin = {} }) {
         {
           onSuccess: () => {
             reset();
+            onClose?.();
           },
         },
       );
@@ -56,7 +56,10 @@ function CreateCabinForm({ editCabin = {} }) {
   const isLoading = isCreating || isUpdating;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onClose ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -139,7 +142,12 @@ function CreateCabinForm({ editCabin = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" size="small" type="reset">
+        <Button
+          variation="secondary"
+          size="small"
+          type="reset"
+          onClick={() => onClose?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isLoading}>

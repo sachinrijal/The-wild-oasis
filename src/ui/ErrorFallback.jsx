@@ -30,11 +30,11 @@ const Box = styled.div`
   }
 `;
 
-function ErrorFallback() {
+function ErrorFallback({children}) {
   return (
-    <div>
-      
-    </div>
+    <StyledErrorFallback>
+      <Box>{children}</Box>
+    </StyledErrorFallback>
   )
 }
 
