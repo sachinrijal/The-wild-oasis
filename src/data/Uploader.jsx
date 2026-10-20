@@ -1,11 +1,12 @@
 import { isFuture, isPast, isToday } from 'date-fns';
 import { useState } from 'react';
-import supabase from 'services/supabase';
-import Button from 'ui/Button';
-import { subtractDates } from 'utils/helpers';
+import supabase from "../services/supabase";
+import Button from '../ui/Button';
+import { subtractDates } from '../utils/helpers';
 import { bookings } from './data-bookings';
 import { cabins } from './data-cabins';
 import { guests } from './data-guests';
+
 
 // const originalSettings = {
 //   minBookingLength: 3,
@@ -20,7 +21,7 @@ async function deleteGuests() {
 }
 
 async function deleteCabins() {
-  const { error } = await supabase.from('cabins').delete().gt('id', 0);
+  const { error } = await supabase.from('cabin').delete().gt('id', 0);
   if (error) console.log(error.message);
 }
 
@@ -35,7 +36,7 @@ async function createGuests() {
 }
 
 async function createCabins() {
-  const { error } = await supabase.from('cabins').insert(cabins);
+  const { error } = await supabase.from('cabin').insert(cabins);
   if (error) console.log(error.message);
 }
 
@@ -47,7 +48,7 @@ async function createBookings() {
     .order('id');
   const allGuestIds = guestsIds.map((cabin) => cabin.id);
   const { data: cabinsIds } = await supabase
-    .from('cabins')
+    .from('cabin')
     .select('id')
     .order('id');
   const allCabinIds = cabinsIds.map((cabin) => cabin.id);
@@ -99,7 +100,7 @@ async function createBookings() {
   if (error) console.log(error.message);
 }
 
-export function Uploader() {
+export default function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function uploadAll() {
@@ -144,15 +145,16 @@ export function Uploader() {
       >
         Upload ALL sample data
       </Button>
-      <p>Only run this only once!</p>
+      {/* <p>Only run this only once!</p>
       <p>
         <em>(Cabin images need to be uploaded manually)</em>
-      </p>
-      <hr />
+      </p>*/}
+      <hr /> 
+      <br />
       <Button onClick={uploadBookings} disabled={isLoading}>
         Upload CURRENT bookings
       </Button>
-      <p>You can run this every day you develop the app</p>
+      {/* <p>You can run this every day you develop the app</p> */}
     </div>
   );
 }

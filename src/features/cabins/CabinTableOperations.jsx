@@ -11,10 +11,10 @@ const filtred_options = [
 const Sorting_options = [
     {value : "name-asc" , label:"Sort by name (A-Z)"},
     {value : "name-desc" , label:"Sort by name (Z-A)"},
-    {value : "regularPrice-asc" , label:"Sort by Higher Price"},
-    {value : "regularPrice-desc" , label:"Sort by Lower Price"},
-    {value : "maxCapacity-asc" , label:"Sort by Higher Max Capacity"},
-    {value : "maxCapacity-desc" , label:"Sort by Lower Max Capacity"},
+    {value : "regularPrice-asc" , label:"Sort by Price (lower first)"},
+    {value : "regularPrice-desc" , label:"Sort by Price (Higher first)"},
+    {value : "maxCapacity-asc" , label:"Sort by Max Capacity (lower first)"},
+    {value : "maxCapacity-desc" , label:"Sort by Max Capacity (Higher first)"},
 ]
 
 function CabinTableOperations() {

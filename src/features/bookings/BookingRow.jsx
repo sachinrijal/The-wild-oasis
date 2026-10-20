@@ -45,7 +45,7 @@ function BookingRow({
     totalPrice,
     status,
     guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
+    cabin: { name: cabinName },
   },
 }) {
   const statusToTagName = {

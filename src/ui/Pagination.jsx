@@ -1,4 +1,7 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { PAGE_ITEM } from "../utils/constants";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -55,3 +58,47 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+
+
+function Pagination({ count }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+  const totalPage = Math.ceil(count / PAGE_ITEM);
+
+  function previous() {
+    const value = currentPage === 1 ? currentPage : currentPage - 1;
+    searchParams.set("page", value);
+    setSearchParams(searchParams);
+  }
+
+  function next() {
+    const value = currentPage === totalPage ? currentPage : currentPage + 1;
+    searchParams.set("page", value);
+    setSearchParams(searchParams);
+  }
+
+  if (count < PAGE_ITEM) return null ;
+
+  return (
+    <StyledPagination>
+      <P>
+        showing <span>{(currentPage -1) * PAGE_ITEM + 1  }</span> to <span>{currentPage === totalPage ? count  : currentPage * PAGE_ITEM }</span> of <span>{count}</span>{" "}
+        results
+      </P>
+      <Buttons>
+        <PaginationButton disabled={currentPage === 1} onClick={previous}>
+          <ChevronLeft />
+          Previous
+        </PaginationButton>
+        <PaginationButton disabled={currentPage === totalPage} onClick={next}>
+          <ChevronRight />
+          Next
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  );
+}
+
+export default Pagination;
