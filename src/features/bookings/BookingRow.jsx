@@ -6,6 +6,13 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import Menus from "../../ui/Menus";
+import { Delete, Eye, SquareArrowDown, SquareArrowUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import useCheckout from "../check-in-out/useCheckout";
+import useDeleteBooking from "./useDeleteBooking";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -54,6 +61,11 @@ function BookingRow({
     "checked-out": "silver",
   };
 
+  const navigate = useNavigate();
+
+  const { checkOut } = useCheckout();
+  const { deleteBooking , isDeleting } = useDeleteBooking();
+
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -65,9 +77,9 @@ function BookingRow({
 
       <Stacked>
         <span>
-          {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}{" "}
+          {isToday(new Date(startDate)) ?
+            "Today"
+          : formatDistanceFromNow(startDate)}{" "}
           &rarr; {numNights} night stay
         </span>
         <span>
@@ -79,6 +91,48 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+
+      <Modal>
+        <Menus.Menu>
+          <Menus.Toggle id={bookingId} />
+
+          <Menus.List id={bookingId}>
+            <Menus.Button onClick={() => navigate(`/bookings/${bookingId}`)}>
+              <Eye />
+              See details
+            </Menus.Button>
+
+            {status === "unconfirmed" && (
+              <Menus.Button onClick={() => navigate(`/check-in/${bookingId}`)}>
+                <SquareArrowDown />
+                Check-in{" "}
+              </Menus.Button>
+            )}
+
+            {status === "checked-in" && (
+              <Menus.Button onClick={() => checkOut(bookingId)}>
+                <SquareArrowUp />
+                Check-out{" "}
+              </Menus.Button>
+            )}
+
+            <Modal.Open open="delete-booking">
+              <Menus.Button>
+                <Delete />
+                Delete
+              </Menus.Button>
+            </Modal.Open>
+          </Menus.List>
+        </Menus.Menu>
+
+        <Modal.Window name="delete-booking">
+          <ConfirmDelete
+            resource="Booking"
+            disabled={isDeleting}
+            onConfirm={() => deleteBooking(bookingId)}
+          />
+        </Modal.Window>
+      </Modal>
     </Table.Row>
   );
 }

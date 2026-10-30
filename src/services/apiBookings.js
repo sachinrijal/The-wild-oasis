@@ -3,11 +3,11 @@ import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 
-export async function getBookings({ filter, sortBy , page }) {
+export async function getBookings({ filter, sortBy, page }) {
 
   let query = supabase
     .from("bookings")
-    .select("id , created_at , startDate ,endDate ,numNights ,numGuests , totalPrice , status , cabin(name) , guests(fullName , email) " ,{ count : "exact"});
+    .select("id , created_at , startDate ,endDate ,numNights ,numGuests , totalPrice , status , cabin(name) , guests(fullName , email) ", { count: "exact" });
 
   // filtering 
   if (filter) {
@@ -23,29 +23,30 @@ export async function getBookings({ filter, sortBy , page }) {
 
   // pagination 
   if (page) {
-    const from = (page -1) * PAGE_ITEM;
-    const to = (page * PAGE_ITEM) -1  ;
-    query = query.range(from , to)
+    const from = (page - 1) * PAGE_ITEM;
+    const to = from + PAGE_ITEM - 1;
+    query = query.range(from, to)
   }
 
 
-  const { data, error , count } = await query;
+  const { data, error, count } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Bookings not found!")
   }
 
-  return {data , count};
+  return { data, count };
 }
 
 export async function getBooking(id) {
+
   const { data, error } = await supabase
     .from("bookings")
-    .select("*, cabins(*), guests(*)")
+    .select("*, cabin(*), guests(*)")
     .eq("id", id)
     .single();
-
+    
   if (error) {
     console.error(error);
     throw new Error("Booking not found");
@@ -125,7 +126,8 @@ export async function updateBooking(id, obj) {
 
 export async function deleteBooking(id) {
   // REMEMBER RLS POLICIES
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  console.log(id)
+  const { data, error } = await supabase.from("bookings").delete().eq("id", id).select();
 
   if (error) {
     console.error(error);

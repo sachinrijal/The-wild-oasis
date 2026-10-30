@@ -1,18 +1,18 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import useBooking from "./useBooking";
+import useBookings from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
 import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { status, bookings, error , count } = useBooking();
+  const { status, bookings, error , count } = useBookings();
 
   if (status === "pending") return <Spinner />;
   if (!bookings) return <Empty resource="Bookings" />;
-  // if (error) return;
-  console.error(error);
+  
+  if (error) console.error(error);
 ;
 
   return (
