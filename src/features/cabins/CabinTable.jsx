@@ -7,15 +7,14 @@ import { useSearchParams } from "react-router-dom";
 
 function CabinTable() {
   const { cabins, status, error } = useCabin();
-
   const [searchParams] = useSearchParams();
   const filterValue = searchParams.get("discount") || "all";
-
+  
   if (status === "pending") return <Spinner />;
-  if (error) return;
-
+  if (error) throw new Error;
+  
   let filteredCabins;
-
+  
   if (filterValue === "with-discount") {
     filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
   } else if (filterValue === "no-discount") {
@@ -23,13 +22,13 @@ function CabinTable() {
   } else if (filterValue === "all") {
     filteredCabins = cabins;
   }
-
+  
   // sorting of the value
   const [sortBy, direction] = (
     searchParams.get("SortBy") || "name-asc"
   ).split("-");
   
-
+  
   const modifier = direction === "asc" ? 1 : -1;
 
   const sortedCabins = [...filteredCabins].sort((a, b) => {
@@ -39,12 +38,10 @@ function CabinTable() {
     if (typeof valueA === "string") {
       return valueA.localeCompare(valueB) * modifier;
     }
-
+    
     return (valueA - valueB) * modifier;
   });
-
-
-
+  
   return (
     <Menu>
       <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">

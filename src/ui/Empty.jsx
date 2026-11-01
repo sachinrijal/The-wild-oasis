@@ -1,5 +1,7 @@
+import Heading from "../ui/Heading"
+
 function Empty({ resource }) {
-  return <p>No {resource} could be found.</p>;
+  return <Heading as="h1">No {resource} could be found.</Heading>;
 }
 
 export default Empty;

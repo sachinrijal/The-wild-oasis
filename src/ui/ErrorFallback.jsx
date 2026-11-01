@@ -30,12 +30,19 @@ const Box = styled.div`
   }
 `;
 
-function ErrorFallback({children}) {
+function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <StyledErrorFallback>
-      <Box>{children}</Box>
+      <Box>
+        <h1>Something went wrong!</h1>
+        <p>{error.message}</p>
+
+        <button onClick={resetErrorBoundary}>
+          Try again
+        </button>
+      </Box>
     </StyledErrorFallback>
-  )
+  );
 }
 
 export default ErrorFallback
