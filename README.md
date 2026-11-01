@@ -1,19 +1,61 @@
-# React + Vite
+# The Wild Oasis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The Wild Oasis is a hotel management application built with React. It provides an intuitive dashboard for managing cabins, guests, bookings, and hotel operations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Dashboard:** View booking statistics and business insights.
+- **Cabin Management:** Create, update, and manage hotel cabins.
+- **Booking Management:** View, sort, filter, and manage reservations.
+- **Guest Management:** Access and manage guest information.
+- **Check-in & Check-out:** Handle guest check-in and check-out operations.
+- **Authentication:** Secure login and protected application routes.
+- **Data Management:** Efficient server-state management and data synchronization.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **React.js** – Frontend library
+- **React Router** – Routing and navigation
+- **TanStack React Query** – Server-state management and data fetching
+- **Supabase** – Backend services, authentication, and database
+- **Styled Components** – Component-based styling
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## Getting Started
 
-## Expanding the ESLint configuration
+### 1. Clone the repository
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+git clone https://github.com/sachinrijal/The-wild-oasis
+```
+
+### 2. Navigate to the project directory
+
+```bash
+cd the-wild-oasis
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+Open the local URL provided by Vite in your browser.
+
+## Live Demo
+
+[View The Wild Oasis](https://the-wild-oasis-sachin.vercel.app/)
+
+## Project Purpose
+
+This project was developed to gain practical experience with modern React development, server-state management, authentication, database integration, reusable components, and building maintainable frontend applications.
+
+---
+
+**Built with React.js and Supabase.**
