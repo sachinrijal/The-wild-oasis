@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { eachDayOfInterval, format, isSameDay,  subDays } from "date-fns";
+import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
@@ -21,7 +21,6 @@ const StyledSalesChart = styled(DashboardBox)`
     stroke: var(--color-grey-300);
   }
 `;
-
 
 function SalesChart({ bookings, numDays }) {
   const { isDarkMode } = useDarkMode();
@@ -45,7 +44,6 @@ function SalesChart({ bookings, numDays }) {
     end: new Date(),
   });
 
-
   const data = allDates.map((date) => {
     return {
       label: format(date, "MMM dd"),
@@ -58,16 +56,19 @@ function SalesChart({ bookings, numDays }) {
         .reduce((acc, val) => acc + val.extrasPrice, 0),
     };
   });
-  
+
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales from {format(allDates.at(0), "MMM dd yyyy")} &mdash;{" "}
+        {format(allDates.at(-1), "MMM dd yyyy")}{" "}
+      </Heading>
 
       <AreaChart
         data={data}
         style={{
           width: "100%",
-          
+
           maxHeight: "300px",
           aspectRatio: 1.618,
         }}
